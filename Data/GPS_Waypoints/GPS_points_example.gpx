@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gpx creator = "GPS Waypoints App" xmlns="http://www.topografix.com/GPX/1/1" version="1.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd ">
+	<wpt lat="55.78287428" lon="12.51704279">
+		<name>WPT 01</name>
+		<ele>40.62450066834657</ele>
+		<time>2024-08-12T14:47:15Z</time>
+		<extensions>
+			<accuracy>3.7900925</accuracy>
+			<provider>gps</provider>
+			<qualityfix>SPS</qualityfix>
+			<altitudehae>77.00634765625</altitudehae>
+		</extensions>
+	</wpt>
+	<wpt lat="55.78330678" lon="12.51719565">
+		<name>WPT 02</name>
+		<ele>38.986457402666325</ele>
+		<time>2024-08-12T14:48:11Z</time>
+		<extensions>
+			<accuracy>3.7900925</accuracy>
+			<provider>gps</provider>
+			<qualityfix>SPS</qualityfix>
+			<altitudehae>75.36767578125</altitudehae>
+		</extensions>
+	</wpt>
+	<wpt lat="55.78351913" lon="12.51510737">
+		<name>WPT 03</name>
+		<ele>43.954894045731955</ele>
+		<time>2024-08-12T14:49:53Z</time>
+		<extensions>
+			<accuracy>3.7900925</accuracy>
+			<provider>gps</provider>
+			<qualityfix>SPS</qualityfix>
+			<altitudehae>80.33624267578125</altitudehae>
+		</extensions>
+	</wpt>
+	<wpt lat="55.78327924" lon="12.514178">
+		<name>WPT 04</name>
+		<ele>43.58828600131659</ele>
+		<time>2024-08-12T14:50:55Z</time>
+		<extensions>
+			<accuracy>3.7900925</accuracy>
+			<provider>gps</provider>
+			<qualityfix>SPS</qualityfix>
+			<altitudehae>79.97015380859375</altitudehae>
+		</extensions>
+	</wpt>
+</gpx>
