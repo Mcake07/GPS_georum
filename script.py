@@ -3,9 +3,10 @@ from Functions.utils import csvLoader
 from Functions.utils import plotHeightMap
 from Functions.utils import pdExport
 from Functions.utils import getReferenceHeight
+import matplotlib.pyplot as plt
 
 # Indhent vores .csv fil
-df = csvLoader('C:/Users/Mariu/Desktop/DTU/30101 Intro til GeoRum1/GPS_ting/GPS_praecs/Data/GPS_Waypoints/GPS_waypoints_waypointLite.csv')
+df = csvLoader('Data/GPS_Waypoints/GPS_waypoints_waypointLite.csv')
 
 # # # Plot et overfladehøjdekort hvor vi selv definerer titlen på kortet
 #
@@ -44,3 +45,6 @@ df_new = getReferenceHeight(df)
 
 # Brug funktionen til at eksportere vores data - vi definerer at vi gerne vil have at output filen skal være i .csv format ved at angive det i navnet på den. 
 pdExport(df_new, "Results/test_GPS_points_with_reference_heights.csv")
+
+
+plt.show()
