@@ -20,6 +20,14 @@ terraen = wp['Altitude_Reference_Terrain'].to_numpy(dtype=float)
 terraen = np.where(terraen < -1000, np.nan, terraen)
 
 diff = gps - terraen
+high_limit = 2.0
+low_limit = 0.0
+
+gyldig = ~np.isnan(diff)
+ok = gyldig & (diff <= high_limit) & (diff >= low_limit)
+
+fjernet = nr[gyldig & ~ok]
+print(F'Fjernede {len(fjernet)} punkt(er) uden for [{low_limit}, {high_limit}] m: {fjernet}')
 
 fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 7), sharex=True)
 
@@ -42,15 +50,7 @@ ax2.grid(True)
 plt.tight_layout()
 plt.show()
 
-# --- Fjern outliers baseret på diskrepansen (median + MAD) ---
-k = 3.0   # jo lavere, jo mere aggressivt filter (2.5-3.5 er typisk)
-med = np.nanmedian(diff)
-mad = np.nanmedian(np.abs(diff - med))
-sigma = 1.4826 * mad                      # MAD omregnet til "standardafvigelse"
-ok = np.abs(diff - med) <= k * sigma      # NaN giver False, så de falder også fra
 
-print(f"Fjernede {np.sum(~ok & ~np.isnan(diff))} outlier(s) ud af {len(diff)} punkter")
-print("Fjernede waypointnumre:", nr[~ok & ~np.isnan(diff)])
 
 nr_c, gps_c, ter_c, diff_c = nr[ok], gps[ok], terraen[ok], diff[ok]
 
@@ -169,19 +169,16 @@ def plot_diskrepans_3d(X, Y, d, titel, nr_labels=None):
     plt.show()
 
 # --- Plot 1: diskrepans, alle punkter ---
-gyldig = ~np.isnan(diff)
 plot_diskrepans_3d(X_all[gyldig], Y_all[gyldig], diff[gyldig],
                    'Diskrepans GPS − terræn (alle punkter)', nr[gyldig])
 
 # --- Plot 2: diskrepans uden outliers ---
-ok2 = gyldig & (diff <= graense_hoj) & (diff >= graense_lav)
-fjernet = nr[gyldig & ~ok2]
 print(f"Fjernede {len(fjernet)} punkt(er) uden for [{graense_lav}, {graense_hoj}] m: {fjernet}")
-print(f"Middel diskrepans uden outliers: {np.mean(diff[ok2]):.2f} m "
+print(f"Middel diskrepans uden outliers: {np.mean(diff[ok]):.2f} m "
       f"(forventet {forventet:.1f} m)")
 
-plot_diskrepans_3d(X_all[ok2], Y_all[ok2], diff[ok2],
-                   f'Diskrepans uden outliers (0–{graense_hoj:.0f} m over jorden)', nr[ok2])
+plot_diskrepans_3d(X_all[ok], Y_all[ok], diff[ok],
+                   f'Diskrepans uden outliers (0–{graense_hoj:.0f} m over jorden)', nr[ok])
 
 
 import glob
@@ -249,13 +246,13 @@ plot_diskrepans_3d(X_all[gyldig], Y_all[gyldig], diff[gyldig],
                    'Diskrepans GPS − terræn (alle) og objekthøjde', nr[gyldig])
 
 # --- Plot 2: uden outliers ---
-plot_diskrepans_3d(X_all[ok2], Y_all[ok2], diff[ok2],
-                   'Diskrepans uden outliers og objekthøjde', nr[ok2])
+plot_diskrepans_3d(X_all[ok], Y_all[ok], diff[ok],
+                   'Diskrepans uden outliers og objekthøjde', nr[ok])
 
 # --- Tal på sammenhængen: objekthøjde ved hvert waypoint vs. diskrepans ---
 obj = (wp['Altitude_Reference_Surface'] - wp['Altitude_Reference_Terrain']).to_numpy(dtype=float)
 obj = np.where(np.abs(obj) > 1000, np.nan, obj)
-mask = ok2 & ~np.isnan(obj)
+mask = ok & ~np.isnan(obj)
 r = np.corrcoef(obj[mask], diff[mask])[0, 1]
 print(f"Korrelation mellem objekthøjde (DSM−DTM) og diskrepans: r = {r:.2f} (n = {mask.sum()})")
 
@@ -313,6 +310,6 @@ plot_diskrepans_dsm_3d(X_all[g], Y_all[g], dsm_wp[g], diff[g],
                        'Diskrepans (farve) oven på overfladekortet - alle punkter', nr[g])
 
 # --- Plot 2: uden outliers ---
-g2 = ok2 & ~np.isnan(dsm_wp)
+g2 = ok & ~np.isnan(dsm_wp)
 plot_diskrepans_dsm_3d(X_all[g2], Y_all[g2], dsm_wp[g2], diff[g2],
                        'Diskrepans (farve) oven på overfladekortet - uden outliers', nr[g2])

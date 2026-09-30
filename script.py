@@ -1,9 +1,13 @@
 # Importer vores funktion
+import matplotlib
+matplotlib.use('TkAgg')
+import matplotlib.pyplot as plt
 from Functions.utils import csvLoader
 from Functions.utils import plotHeightMap
 from Functions.utils import pdExport
 from Functions.utils import getReferenceHeight
-import matplotlib.pyplot as plt
+import os
+os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 # Indhent vores .csv fil
 df = csvLoader('Data/GPS_Waypoints/GPS_waypoints_waypointLite.csv')
