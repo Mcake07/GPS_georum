@@ -9,6 +9,7 @@ os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 df = pd.read_csv('Results/test_GPS_points_with_reference_heights.csv')
 df['Diskrepans'] = df['Altitude_MSL'] - df['Altitude_Reference_Terrain']
+df['Objekthøjde'] = df['Altitude_Reference_Surface'] - df['Altitude_Reference_Terrain']
 
 real_mål = df[(df['Diskrepans'] > 0) & (df['Diskrepans'] <= 2)]
 
@@ -36,7 +37,26 @@ for data, titel in [(df, "Alle punkter"), (real_mål, "Uden outliers")]:
     ax2.grid(True)
 
     plt.tight_layout()
-    
+
+for data, titel in [(df, "Alle punkter"), (real_mål, "Uden outliers")]:
+    nr = data.index + 1
+
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 7), sharex=True)
+
+
+    ax1.plot(nr, data['Objekthøjde'], 'o-', label='Objekthøjde (DSM - DTM)')
+    ax1.set_ylabel('Højde (m)')
+    ax1.set_title(titel)
+    ax1.legend()
+    ax1.grid(True)
+
+    ax2.plot(nr, data['Accuracy'], 'o-', label='GPS-usikkerhed')
+    ax2.set_ylabel('Usikkerhed (m)')
+    ax2.set_xlabel('Waypoint nr.')
+    ax2.legend()
+    ax2.grid(True)
+
+    plt.tight_layout()
 
 
 plt.show()
